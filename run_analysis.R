@@ -38,6 +38,10 @@ ReadCleanData <- function(NameFolder, NameDataSet = "train"){
   # Combine activities with measurements
   Data <- cbind(Data, Measurements)
   
+  # Make columnames tidy
+  colnames(Data) <- gsub(".mean","Mean",colnames(Data))
+  colnames(Data) <- gsub(".std","Std",colnames(Data))
+  
   # Return dataset
   Data
 }
@@ -60,3 +64,6 @@ Data <- ReadDatasets(NameFolder = "UCI HAR Dataset")
 
 # Create tidy dataset
 Data %>% group_by(ActivityLabel, SubjectNumber) %>% summarise_all(funs(mean)) -> DataTidy
+
+# Save dataset
+write.table(Data, file="TidyDataset.txt", row.name=FALSE)
